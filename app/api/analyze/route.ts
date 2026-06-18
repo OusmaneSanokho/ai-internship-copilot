@@ -7,14 +7,18 @@ const client = new Anthropic({
 
 export async function POST(request: NextRequest) {
   try {
-    const { cvText } = await request.json()
+    const formData = await request.formData()
+    const file = formData.get('file') as File
 
-    if (!cvText || cvText.trim() === '') {
+    if (!file) {
       return NextResponse.json(
-        { error: 'No CV text provided' },
+        { error: 'No file provided' },
         { status: 400 }
       )
     }
+
+    const arrayBuffer = await file.arrayBuffer()
+    const base64PDF = Buffer.from(arrayBuffer).toString('base64')
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
@@ -22,10 +26,18 @@ export async function POST(request: NextRequest) {
       messages: [
         {
           role: 'user',
-          content: `You are an expert career advisor and recruiter. Analyze the following CV/resume for an internship applicant and provide structured feedback.
-
-CV Content:
-${cvText}
+          content: [
+            {
+              type: 'document',
+              source: {
+                type: 'base64',
+                media_type: 'application/pdf',
+                data: base64PDF,
+              },
+            },
+            {
+              type: 'text',
+              text: `You are an expert career advisor and recruiter. Analyze the CV/resume in this PDF for an internship applicant and provide structured feedback.
 
 Please provide your analysis in exactly this format:
 
@@ -40,6 +52,8 @@ MISSING SKILLS:
 
 LEARNING ROADMAP:
 - List 4-6 specific actionable steps the student should take to improve their chances`,
+            },
+          ],
         },
       ],
     })

@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import UploadZone from '@/components/UploadZone'
 import ResultsPanel from '@/components/ResultsPanel'
-import { extractTextFromPDF } from '@/lib/parseCV'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
@@ -19,12 +18,12 @@ export default function Home() {
     setAnalysis(null)
 
     try {
-      const cvText = await extractTextFromPDF(file)
+      const formData = new FormData()
+      formData.append('file', file)
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ cvText }),
+        body: formData,
       })
 
       const data = await response.json()
