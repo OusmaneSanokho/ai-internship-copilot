@@ -1,14 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import UploadZone from '@/components/UploadZone'
 import ResultsPanel from '@/components/ResultsPanel'
+import Hero from '@/components/Hero'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
   const [analysis, setAnalysis] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const uploadRef = useRef<HTMLDivElement>(null)
+
+  function scrollToUpload() {
+    uploadRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   async function handleAnalyze() {
     if (!file) return
@@ -43,28 +49,20 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="mx-auto max-w-2xl">
+    <main className="min-h-screen bg-[var(--background)]">
+      <Hero onGetStarted={scrollToUpload} />
 
-        <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-gray-900">
-            AI Internship Copilot
-          </h1>
-          <p className="mt-3 text-gray-500">
-            Upload your CV and get instant AI feedback to boost your internship chances.
-          </p>
-        </div>
-
-        <div className="rounded-2xl bg-white p-8 shadow-sm border border-gray-100">
+      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pb-24">
+        <div className="glass-card rounded-2xl p-8 transition-all">
           <UploadZone onFileSelected={(f) => setFile(f)} />
 
           <button
             onClick={handleAnalyze}
             disabled={!file || loading}
-            className={`mt-6 w-full rounded-xl py-3 px-6 text-white font-semibold text-lg transition-colors ${
+            className={`mt-6 w-full rounded-xl py-3.5 px-6 text-white font-semibold text-lg transition-all ${
               !file || loading
-                ? 'bg-gray-300 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
+                ? 'bg-white/10 cursor-not-allowed text-gray-500'
+                : 'gradient-button cursor-pointer'
             }`}
           >
             {loading ? 'Analyzing your CV...' : 'Analyze CV'}
@@ -77,14 +75,13 @@ export default function Home() {
           )}
 
           {error && (
-            <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-4">
-              <p className="text-red-600 text-sm">{error}</p>
+            <div className="mt-4 rounded-xl bg-red-500/10 border border-red-500/20 p-4">
+              <p className="text-red-400 text-sm">{error}</p>
             </div>
           )}
         </div>
 
         {analysis && <ResultsPanel analysis={analysis} />}
-
       </div>
     </main>
   )
