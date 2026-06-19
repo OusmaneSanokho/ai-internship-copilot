@@ -49,10 +49,11 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)]">
+    <main className="relative min-h-screen overflow-hidden bg-[var(--background)]">
       <Hero onGetStarted={scrollToUpload} />
 
-      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pb-24">
+      <div className="glow-blob animate-pulse-glow h-96 w-96 bg-indigo-600/30 top-[60vh] left-1/2 -translate-x-1/2 -z-10" />
+      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pt-12 pb-24">
         <div className="glass-card rounded-2xl p-8 transition-all">
           <UploadZone onFileSelected={(f) => setFile(f)} />
 
@@ -83,6 +84,7 @@ export default function Home() {
 
         {analysis && <ResultsPanel analysis={analysis} />}
       </div>
-    </main>
-  )
+
+      <div className="glow-blob animate-pulse-glow h-96 w-96 bg-cyan-500/20 top-[150vh] left-10 -z-10" />
+    </main>)
 }
