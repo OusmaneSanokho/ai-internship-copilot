@@ -58,39 +58,42 @@ export default function Home() {
 
       <Hero onGetStarted={scrollToUpload} />
 
-      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pb-32 pt-8">
+      <div ref={uploadRef} className="flex flex-col items-center w-full px-4 pb-32 pt-8">
+        <div className="w-full max-w-2xl">
 
-        <div className="glass-card p-8">
-          <UploadZone onFileSelected={(f) => setFile(f)} />
+          <div className="glass-card p-8">
+            <UploadZone onFileSelected={(f) => setFile(f)} />
 
-          <button
-            onClick={handleAnalyze}
-            disabled={!file || loading}
-            className="gradient-button mt-6 w-full rounded-xl py-4 text-base font-semibold disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
-          >
-            {loading ? 'Analyzing...' : 'Analyze CV'}
-          </button>
+            <button
+              onClick={handleAnalyze}
+              disabled={!file || loading}
+              className="gradient-button mt-6 w-full rounded-xl py-4 text-base font-semibold disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+            >
+              {loading ? 'Analyzing...' : 'Analyze CV'}
+            </button>
 
-          {loading && (
-            <p className="mt-4 text-center text-sm text-zinc-500 animate-pulse">
-              Claude is reading your CV. This takes about 15 seconds...
-            </p>
-          )}
+            {loading && (
+              <p className="mt-4 text-center text-sm text-zinc-500 animate-pulse">
+                Claude is reading your CV. This takes about 15 seconds...
+              </p>
+            )}
 
-          {error && (
-            <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-              <p className="text-sm text-red-400">{error}</p>
+            {error && (
+              <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+                <p className="text-sm text-red-400">{error}</p>
+              </div>
+            )}
+          </div>
+
+          {analysis && (
+            <div className="animate-fade-up">
+              <ResultsPanel analysis={analysis} />
             </div>
           )}
+
         </div>
-
-        {analysis && (
-          <div className="animate-fade-up">
-            <ResultsPanel analysis={analysis} />
-          </div>
-        )}
-
       </div>
+
     </main>
   )
 }
