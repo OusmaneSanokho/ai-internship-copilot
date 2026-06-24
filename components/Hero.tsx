@@ -27,13 +27,13 @@ export default function Hero({ onGetStarted }: { onGetStarted: () => void }) {
         <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
           <button
             onClick={onGetStarted}
-            className="gradient-button rounded-xl px-8 py-3.5 text-base font-semibold"
+            className="gradient-button rounded-xl px-12 py-3.5 text-base font-semibold min-w-[200px]"
           >
             Analyze My Resume
           </button>
           <button
             onClick={onGetStarted}
-            className="rounded-xl border border-white/10 bg-white/5 px-8 py-3.5 text-base font-semibold text-zinc-300 transition-all hover:bg-white/10 hover:border-white/20"
+            className="rounded-xl border border-white/10 bg-white/5 px-12 py-3.5 text-base font-semibold text-zinc-300 transition-all hover:bg-white/10 hover:border-white/20 min-w-[160px]"
           >
             View Demo
           </button>

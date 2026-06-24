@@ -18,7 +18,6 @@ export default function Home() {
 
   async function handleAnalyze() {
     if (!file) return
-
     setLoading(true)
     setError(null)
     setAnalysis(null)
@@ -50,41 +49,48 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[var(--background)]">
+
+      <div className="glow-blob animate-pulse-glow h-[500px] w-[500px] bg-indigo-600 -top-20 left-1/4 -z-10" />
+      <div className="glow-blob animate-pulse-glow h-[400px] w-[400px] bg-violet-700 top-10 right-1/4 -z-10" />
+      <div className="glow-blob animate-pulse-glow h-[400px] w-[400px] bg-indigo-800 top-[60vh] left-10 -z-10" />
+      <div className="glow-blob animate-pulse-glow h-[300px] w-[300px] bg-violet-800 top-[120vh] right-10 -z-10" />
+      <div className="glow-blob animate-pulse-glow h-[400px] w-[400px] bg-indigo-900 top-[180vh] left-1/3 -z-10" />
+
       <Hero onGetStarted={scrollToUpload} />
 
-      <div className="glow-blob animate-pulse-glow h-96 w-96 bg-indigo-600/30 top-[60vh] left-1/2 -translate-x-1/2 -z-10" />
-      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pt-12 pb-24">
-        <div className="glass-card rounded-2xl p-8 transition-all">
+      <div ref={uploadRef} className="mx-auto max-w-2xl px-4 pb-32 pt-8">
+
+        <div className="glass-card p-8">
           <UploadZone onFileSelected={(f) => setFile(f)} />
 
           <button
             onClick={handleAnalyze}
             disabled={!file || loading}
-            className={`mt-6 w-full rounded-xl py-3.5 px-6 text-white font-semibold text-lg transition-all ${
-              !file || loading
-                ? 'bg-white/10 cursor-not-allowed text-gray-500'
-                : 'gradient-button cursor-pointer'
-            }`}
+            className="gradient-button mt-6 w-full rounded-xl py-4 text-base font-semibold disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
           >
-            {loading ? 'Analyzing your CV...' : 'Analyze CV'}
+            {loading ? 'Analyzing...' : 'Analyze CV'}
           </button>
 
           {loading && (
-            <p className="mt-4 text-center text-sm text-gray-400 animate-pulse">
-              Claude is reading your CV. This takes about 10 seconds...
+            <p className="mt-4 text-center text-sm text-zinc-500 animate-pulse">
+              Claude is reading your CV. This takes about 15 seconds...
             </p>
           )}
 
           {error && (
-            <div className="mt-4 rounded-xl bg-red-500/10 border border-red-500/20 p-4">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+              <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
         </div>
 
-        {analysis && <ResultsPanel analysis={analysis} />}
-      </div>
+        {analysis && (
+          <div className="animate-fade-up">
+            <ResultsPanel analysis={analysis} />
+          </div>
+        )}
 
-      <div className="glow-blob animate-pulse-glow h-96 w-96 bg-cyan-500/20 top-[150vh] left-10 -z-10" />
-    </main>)
+      </div>
+    </main>
+  )
 }
