@@ -58,6 +58,20 @@ function extractWeeks(text: string): { week: string; title: string; tasks: strin
 }
 
 export default function ResultsPanel({ analysis }: Props) {
+  if (analysis.trim() === 'NOT_A_CV') {
+    return (
+      <div className="mt-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/5 p-8 text-center">
+        <p className="text-2xl mb-3">📄</p>
+        <h3 className="text-base font-semibold text-yellow-400 mb-2">
+          This doesn't look like a CV
+        </h3>
+        <p className="text-sm text-zinc-400">
+          Please upload a resume or CV document. Other file types like exam papers, assignments, or reports are not supported.
+        </p>
+      </div>
+    )
+  }
+
   const score = extractScore(analysis)
   const scoreLabel = getScoreLabel(score)
 
@@ -79,7 +93,6 @@ export default function ResultsPanel({ analysis }: Props) {
 
   return (
     <div className="mt-8 space-y-6">
-
       <div className="text-center">
         <h2 className="text-2xl font-bold text-white">Your Analysis</h2>
         <p className="mt-1 text-sm text-zinc-500">
@@ -142,7 +155,6 @@ export default function ResultsPanel({ analysis }: Props) {
           Analyze Another CV
         </button>
       </div>
-
     </div>
   )
 }

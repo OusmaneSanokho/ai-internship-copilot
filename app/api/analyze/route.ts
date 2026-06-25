@@ -46,7 +46,11 @@ export async function POST(request: NextRequest) {
               type: 'text',
               text: `You are an expert career advisor, recruiter, and technical interviewer specializing in helping students land internships.
 
-Analyze the CV/resume in this PDF carefully.
+First, determine if the uploaded PDF is a CV or resume.
+If it is NOT a CV or resume (for example: an exam paper, assignment, report, article, or any other document), respond with ONLY this exact text and nothing else:
+NOT_A_CV
+
+If it IS a CV or resume, analyze it carefully and continue with the full analysis below.
 ${jobDescriptionSection}
 Return your analysis using EXACTLY these section headers in EXACTLY this order. Do not skip any section.
 
