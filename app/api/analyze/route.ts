@@ -102,6 +102,7 @@ WEEK 4: [title]
 - Task 3
 
 Important rules:
+- Respond in the same language as the CV
 - Follow the format exactly
 - Be specific to this candidate's actual CV content
 - If no job description is provided, give general internship advice
