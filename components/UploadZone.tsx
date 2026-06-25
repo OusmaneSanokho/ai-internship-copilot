@@ -13,18 +13,33 @@ export default function UploadZone({ onFileSelected }: Props) {
   const [fileName, setFileName] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  function handleFile(file: File) {
+ async function checkPDFSignature(file: File): Promise<boolean> {
+    const slice = file.slice(0, 5)
+    const buffer = await slice.arrayBuffer()
+    const bytes = new Uint8Array(buffer)
+    const header = String.fromCharCode(...bytes)
+    return header === '%PDF-'
+  }
+ async function handleFile(file: File) {
     if (file.type !== 'application/pdf') {
       setErrorMsg('Only PDF files are supported.')
       setState('error')
       return
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setErrorMsg('File too large. Maximum size is 10MB.')
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMsg('File too large. Maximum size is 5MB.')
       setState('error')
       return
     }
+
+    const isValidPDF = await checkPDFSignature(file)
+    if (!isValidPDF) {
+      setErrorMsg('Invalid file. Please upload a real PDF document.')
+      setState('error')
+      return
+    }
+
     setFileName(file.name)
     setState('success')
     setErrorMsg(null)
