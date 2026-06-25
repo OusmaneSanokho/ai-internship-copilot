@@ -5,6 +5,7 @@ import UploadZone from '@/components/UploadZone'
 import ResultsPanel from '@/components/ResultsPanel'
 import Hero from '@/components/Hero'
 import JobDescriptionInput from '@/components/JobDescriptionInput'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
@@ -76,11 +77,7 @@ export default function Home() {
               {loading ? 'Analyzing...' : 'Analyze CV'}
             </button>
 
-            {loading && (
-              <p className="mt-4 text-center text-sm text-zinc-500 animate-pulse">
-                Claude is reading your CV. This takes about 15 seconds...
-              </p>
-            )}
+            {loading && <LoadingSpinner />}
 
             {error && (
               <div className="mt-4 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
