@@ -4,12 +4,14 @@ import { useRef, useState } from 'react'
 import UploadZone from '@/components/UploadZone'
 import ResultsPanel from '@/components/ResultsPanel'
 import Hero from '@/components/Hero'
+import JobDescriptionInput from '@/components/JobDescriptionInput'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
   const [analysis, setAnalysis] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [jobDescription, setJobDescription] = useState('')
   const uploadRef = useRef<HTMLDivElement>(null)
 
   function scrollToUpload() {
@@ -25,6 +27,7 @@ export default function Home() {
     try {
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('jobDescription', jobDescription)
 
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -63,6 +66,7 @@ export default function Home() {
 
           <div className="glass-card p-8">
             <UploadZone onFileSelected={(f) => setFile(f)} />
+            <JobDescriptionInput onTextChange={(text) => setJobDescription(text)} />
 
             <button
               onClick={handleAnalyze}
