@@ -15,20 +15,27 @@ export default function JobDescriptionInput({ onTextChange }: Props) {
     if (value.length <= maxChars) {
       setText(value)
       onTextChange(value)
+    } else {
+      const truncated = value.slice(0, maxChars)
+      setText(truncated)
+      onTextChange(truncated)
     }
   }
 
   const charPercent = Math.round((text.length / maxChars) * 100)
   const charColor =
-    charPercent > 90
+    charPercent >= 100
+      ? 'text-red-400'
+      : charPercent > 90
       ? 'text-red-400'
       : charPercent > 70
       ? 'text-yellow-400'
       : 'text-zinc-500'
 
+  const isAtLimit = text.length >= maxChars
+
   return (
     <div className="mt-4">
-
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <p className="text-sm font-medium text-zinc-300">
@@ -38,7 +45,7 @@ export default function JobDescriptionInput({ onTextChange }: Props) {
             Optional but recommended
           </span>
         </div>
-        <span className={`text-xs ${charColor}`}>
+        <span className={`text-xs font-medium ${charColor}`}>
           {text.length}/{maxChars}
         </span>
       </div>
@@ -54,18 +61,8 @@ export default function JobDescriptionInput({ onTextChange }: Props) {
 
         {text.length === 0 && (
           <div className="pointer-events-none absolute bottom-3 right-3">
-            <svg
-              className="h-4 w-4 text-zinc-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
+            <svg className="h-4 w-4 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
         )}
@@ -80,12 +77,17 @@ export default function JobDescriptionInput({ onTextChange }: Props) {
         )}
       </div>
 
-      {text.length > 0 && (
+      {isAtLimit && (
+        <p className="mt-2 text-xs text-red-400">
+          ⚠️ Maximum length reached. Text has been trimmed to 3000 characters.
+        </p>
+      )}
+
+      {text.length > 0 && !isAtLimit && (
         <p className="mt-2 text-xs text-zinc-600">
           ✓ Claude will compare your resume against this job description
         </p>
       )}
-
     </div>
   )
 }
