@@ -6,6 +6,7 @@ import ResultsPanel from '@/components/ResultsPanel'
 import Hero from '@/components/Hero'
 import JobDescriptionInput from '@/components/JobDescriptionInput'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)
@@ -93,8 +94,9 @@ export default function Home() {
           )}
 
         </div>
-      </div>
+     </div>
 
+      <Footer />
     </main>
   )
 }
